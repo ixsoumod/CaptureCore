@@ -3,3 +3,11 @@ version: '1.0-SNAPSHOT'
 main: fr.ixsou.capturecore.CaptureCore
 api-version: '1.21'
 authors: [ Ixsou_mod ]
+commands:
+  capturecore:
+    description: CaptureCore command
+    usage: /capturecore <reload/help/create/delete/join/leave/start/stop/>
+    aliases: [ cc ]
+    permission: capturecore.command
+    permission-message: You don't have the permission to use this command
+
