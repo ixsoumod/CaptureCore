@@ -55,7 +55,10 @@ public class CaptureCoreAdmin implements CommandExecutor {
 
             String nomarene = args[1]; // Récupérer l'argument 1
             Arene.add(nomarene); // Ajouter à la liste
-            plugin.getConfig().set("arene", Arene); // Sauvegarder la liste dans la configuration
+            plugin.getConfig().set("arenas", nomarene); // Sauvegarder la liste dans la configuration
+
+
+            plugin.saveConfig(); // Sauvegarder la configuration
 
             sender.sendMessage("§aArène créer: " + nomarene);
             return true;
