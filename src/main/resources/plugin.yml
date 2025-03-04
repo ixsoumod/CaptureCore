@@ -1,0 +1,5 @@
+name: CaptureCore
+version: '1.0-SNAPSHOT'
+main: fr.ixsou.capturecore.CaptureCore
+api-version: '1.21'
+authors: [ Ixsou_mod ]
