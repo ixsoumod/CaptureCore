@@ -25,7 +25,7 @@ public class TabComplete implements TabCompleter {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            completions.addAll(Arrays.asList("reload", "help", "create", "delete", "join", "leave", "start", "stop", "edit"));
+            completions.addAll(Arrays.asList("reload", "help", "create", "delete", "join", "leave", "start", "stop", "edit", "tparenalobby"));
         }
         else if (args.length == 2 && args[0].equalsIgnoreCase("edit")) {
             // Vérifie si "arenes" existe dans la config
@@ -39,7 +39,7 @@ public class TabComplete implements TabCompleter {
             if (plugin.getConfig().getConfigurationSection("arenes") != null) {
                 Set<String> arenes = plugin.getConfig().getConfigurationSection("arenes").getKeys(false);
                 if (arenes.contains(args[1])) {
-                    completions.addAll(Arrays.asList("name", "maxplayers", "minplayers", "waitinglobby", "lobby", "spectator", "spawn"));
+                    completions.addAll(Arrays.asList("name", "maxplayers", "minplayers", "waitinglobby", "setlobby", "spectator", "spawn"));
                 }
             }
         }
@@ -50,7 +50,12 @@ public class TabComplete implements TabCompleter {
             if (plugin.getConfig().getConfigurationSection("arenes") != null) {
                 completions.addAll(plugin.getConfig().getConfigurationSection("arenes").getKeys(false));
             }
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("tparenalobby")) {
+            if (plugin.getConfig().getConfigurationSection("arenes") != null) {
+                completions.addAll(plugin.getConfig().getConfigurationSection("arenes").getKeys(false));
+            }
         }
+
 
         return completions;
     }

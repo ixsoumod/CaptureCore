@@ -12,6 +12,7 @@ import java.util.List;
 public class CaptureCoreAdmin implements CommandExecutor {
 
     private final CaptureCore plugin;
+    private CaptureCoreAdminEdit captureCoreAdminEdit;
 
     public CaptureCoreAdmin(CaptureCore plugin) {
         this.plugin = plugin;
@@ -97,6 +98,33 @@ public class CaptureCoreAdmin implements CommandExecutor {
             sender.sendMessage("§aArène supprimée: " + nomArene);
             return true;
         }
+
+        if (args[0].equalsIgnoreCase("tparenalobby")) {
+            if (!sender.hasPermission("capturecore.admin")) {
+                sender.sendMessage("§cVous n'avez pas la permission d'utiliser cette commande !");
+                return true;
+            }
+
+            // Vérifier que l'argument 1 est bien présent
+            if (args.length < 2) {
+                sender.sendMessage("§cUtilisation: /capturecore tparenalobby <nom>");
+                return true;
+            }
+
+            String nomArene = args[1];
+
+            // Vérifier si la section "arenes" existe dans la config et si l'arène spécifiée est valide
+            if (plugin.getConfig().getConfigurationSection("arenes") == null ||
+                    !plugin.getConfig().getConfigurationSection("arenes").getKeys(false).contains(nomArene)) {
+                sender.sendMessage("§cL'arène " + nomArene + " n'existe pas !");
+                return true;
+            }
+
+            sender.sendMessage("§aTéléportation vers le lobby de l'arène: " + nomArene);
+            captureCoreAdminEdit.teleportToLobby(sender, nomArene);
+            return true;
+        }
+
 
 
 
