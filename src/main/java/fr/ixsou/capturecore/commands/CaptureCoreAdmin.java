@@ -45,6 +45,7 @@ public class CaptureCoreAdmin implements CommandExecutor {
             return true;
         }
 
+        //create arena
         if (args[0].equalsIgnoreCase("create")) {
             if (!sender.hasPermission("capturecore.admin")) {
                 sender.sendMessage("§cVous n'avez pas la permission d'utiliser cette commande !");
