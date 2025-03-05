@@ -12,7 +12,6 @@ import java.util.List;
 public class CaptureCoreAdmin implements CommandExecutor {
 
     private final CaptureCore plugin;
-    private final List<String> Arene = new ArrayList<>();
 
     public CaptureCoreAdmin(CaptureCore plugin) {
         this.plugin = plugin;
@@ -26,22 +25,27 @@ public class CaptureCoreAdmin implements CommandExecutor {
         }
 
         // Commande d'aide
-        if (args[0].equalsIgnoreCase("help") && sender.hasPermission("capturecore.admin")) {
+        if (args[0].equalsIgnoreCase("help")) {
+            if (!sender.hasPermission("capturecore.admin")) {
+                sender.sendMessage("§cVous n'avez pas la permission d'utiliser cette commande !");
+                return true;
+            }
             sender.sendMessage(plugin.getHelpMessage());
             return true;
-        }else {
-            sender.sendMessage("§cVous n'avez pas la permission d'utiliser cette commande !");
         }
 
         // Commande de reload
-        if (args[0].equalsIgnoreCase("reload") && sender.hasPermission("capturecore.admin")) {
+        if (args[0].equalsIgnoreCase("reload")) {
+            if (!sender.hasPermission("capturecore.admin")) {
+                sender.sendMessage("§cVous n'avez pas la permission d'utiliser cette commande !");
+                return true;
+            }
             plugin.reloadConfig();
             sender.sendMessage("§aConfiguration rechargée !");
             return true;
-        } else {
-            sender.sendMessage("§cVous n'avez pas la permission d'utiliser cette commande !");
         }
 
+        // Commande create
         if (args[0].equalsIgnoreCase("create")) {
             if (!sender.hasPermission("capturecore.admin")) {
                 sender.sendMessage("§cVous n'avez pas la permission d'utiliser cette commande !");
@@ -53,18 +57,49 @@ public class CaptureCoreAdmin implements CommandExecutor {
                 return true;
             }
 
-            String nomarene = args[1]; // Récupérer l'argument 1
-            Arene.add(nomarene); // Ajouter à la liste
-            plugin.getConfig().set("arenas", nomarene); // Sauvegarder la liste dans la configuratio
+            String nomArene = args[1];
 
+            // Vérifier si l'arène existe déjà dans la config
+            if (plugin.getConfig().getConfigurationSection("arenes." + nomArene) != null) {
+                sender.sendMessage("§cL'arène " + nomArene + " existe déjà !");
+                return true;
+            }
 
-            plugin.saveConfig(); // Sauvegarder la configuration
+            plugin.getConfig().set("arenes." + nomArene + ".name", nomArene);
 
-            sender.sendMessage("§aArène créer: " + nomarene);
+            // Sauvegarder la configuration
+            plugin.saveConfig();
+
+            sender.sendMessage("§aArène ajoutée: " + nomArene + " (Nom: " + nomArene + ")");
+            return true;
+
+        }
+
+        if (args[0].equalsIgnoreCase("delete")){
+            if (!sender.hasPermission("capturecore.admin")) {
+                sender.sendMessage("§cVous n'avez pas la permission d'utiliser cette commande !");
+                return true;
+            }
+
+            if (args.length < 2) {
+                sender.sendMessage("§cUtilisation: /capturecore delete <nom>");
+                return true;
+            }
+
+            String nomArene = args[1];
+
+            if (plugin.getConfig().getConfigurationSection("arenes." + nomArene) == null) {
+                sender.sendMessage("§cL'arène " + nomArene + " n'existe pas !");
+                return true;
+            }
+            String displayname = plugin.getConfig().getString("arenes." + nomArene + ".name");
+            plugin.getConfig().set("arenes." + nomArene, null);
+            plugin.saveConfig();
+            sender.sendMessage("§aArène supprimée: " + nomArene + " (Nom: " + displayname + ")");
             return true;
         }
 
-        sender.sendMessage("§cCommande inconnue ! Fait /capturecore help pour voir les commandes disponibles.");
+        sender.sendMessage("§cCommande inconnue ! Faites /capturecore help pour voir les commandes disponibles.");
         return true;
     }
 }
