@@ -53,14 +53,19 @@ public class CaptureCoreAdmin implements CommandExecutor {
                 return true;
             }
 
-            String nomarene = args[1]; // Récupérer l'argument 1
-            Arene.add(nomarene); // Ajouter à la liste
-            plugin.getConfig().set("arenas", nomarene); // Sauvegarder la liste dans la configuratio
+            String nomarene = args[1];
+            int id = Arene.indexOf(nomarene);
+            Arene.add(nomarene);
+            plugin.getConfig().set("arenes." + nomarene + ".id", id);
 
+            if (Arene.equals(nomarene)) {
+                sender.sendMessage("§cL'arène " + nomarene + " existe déjà !");
+                return true;
+            }
 
             plugin.saveConfig(); // Sauvegarder la configuration
 
-            sender.sendMessage("§aArène créer: " + nomarene);
+            sender.sendMessage("§aArène ajoutée: " + nomarene);
             return true;
         }
 
